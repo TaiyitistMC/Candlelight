@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "com.github.johnrengelman.shadow" version "8.0.0"
 }
 
 architectury {
@@ -19,6 +19,13 @@ configurations {
     developmentNeoForge.extendsFrom common
 }
 
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    neoForge {
+    }
+}
+
 repositories {
     maven {
         name = 'NeoForged'
@@ -36,7 +43,7 @@ dependencies {
     forgeRuntimeLibrary("blue.endless:jankson:1.2.3")
 
     modImplementation "maven.modrinth:do-api:${project.doapi_version}-neoforge"
-    modImplementation "maven.modrinth:lets-do-farm-charm:${project.farm_and_charm_version}-neoforge"
+    //modImplementation "maven.modrinth:lets-do-farm-charm:${project.farm_and_charm_version}-neoforge"
 
     modImplementation "me.shedaniel:RoughlyEnoughItems-neoforge:$rei_version"
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
@@ -64,6 +71,7 @@ remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier.set(null)
+	atAccessWideners.add(loom.accessWidenerPath.get().asFile.getName())
 }
 
 jar {
